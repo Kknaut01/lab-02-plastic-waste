@@ -1,7 +1,7 @@
 ---
 title: "Lab 02 - Plastic waste"
-author: "Insert your name here"
-date: "Insert date here"
+author: "Kyle Knaut"
+date: "January 15th, 2024"
 output: github_document
 ---
 
@@ -18,65 +18,75 @@ plastic_waste <- read.csv("data/plastic-waste.csv")
 ## Exercises
 
 ### Exercise 1
-
-Remove this text, and add your answer for Exercise 1 here.
+Okay this one was really difficult for me to figure out because at first I thought I should include continent as a variable in the aesthetics, and then when that didn't work and I moved to faceting I kept getting an error saying the object continent was not found, but eventually I figured out that I needed a squigly guy. It was tough because there wasn't code to follow on the class page, but I think that might have been the point of this exercise. As for the results of this analysis, it's apparent that North America uses a ton of plastics
 
 ```{r plastic-waste-continent}
-# insert code here
+ggplot(data = plastic_waste, aes(x = plastic_waste_per_cap)) + geom_histogram(binwidth = 0.2) + facet_wrap(~ continent) + labs(x = "Plastic Waste Per Capita (Kg/day)", y = "Countries", title = "Per Capita Plastic Waste By Continent")
 ```
 
 ### Exercise 2
 
+We had to define color and fill in the aesthetics section so that each individual continent would be a different color, and because this command is specifically about the aesthetics of particular variables. We had to define alpha within the geometries command because it applies to every curve, and is not a way to differentiate curves by variable but rather a rule for all of these curves.
+
 ```{r plastic-waste-density}
-# insert code here
+ggplot(data = plastic_waste, aes(x = plastic_waste_per_cap, color = continent, fill = continent)) + geom_density(alpha = 0.3) + labs(x = "Plastic Waste Per Capita (Kg/day)", y = "Density", title = "Per Capita Plastic Waste By Continent")
 ```
 
 ### Exercise 3
-
-Remove this text, and add your answer for Exercise 3 here.
+ 
+ I noticed that a lot of the exercises are kinda jumbled and this one didn't actually have a space for an activity, plus it seems like on the class page there are five activities, while on this lab doc, there are eight. All that is to say I felt like adding in an exercise to play around with visualizing a little more, and practice splitting up the colored density curves with faceting by continent. 
+ 
+```{r plastic-waste-density-faceted}
+ggplot(data = plastic_waste, aes(x = plastic_waste_per_cap, color = continent, fill = continent)) + geom_density() + facet_wrap(~ continent) + labs(x = "Plastic Waste Per Capita (Kg/day)", y = "Density", title = "Per Capita Plastic Waste By Continent")
+```
 
 ### Exercise 4
 
-Remove this text, and add your answer for Exercise 4 here.
+The violin plot shows the distribution of quartiles much more clearly than the box plot, but it is not as easy to determine where the measures of central tendancy fall with the violin plot.
 
 ```{r plastic-waste-violin}
-# insert code here
+ggplot(data = plastic_waste, mapping = aes(x = continent, y = plastic_waste_per_cap)) + geom_boxplot() + labs(x = "Continent", y = "Plastic Waste Per Capita (Kg/day)", title = "Per Capita Plastic Waste By Continent")
+
+ggplot(data = plastic_waste, mapping = aes(x = continent, y = plastic_waste_per_cap)) + geom_violin() + labs(x = "Continent", y = "Plastic Waste Per Capita (Kg/day)", title = "Per Capita Plastic Waste By Continent")
 ```
 
 ### Exercise 5
 
-Remove this text, and add your answer for Exercise 5 here.
+It does not seem like there is a clear relationship, at least not based on the variables that we are considering here, although there are definitely several points on the graph where the plot seems to follow a linear pattern, and it could be the case that in controlling for variables such as continent or income, a relationship may become apparent .
 
 ```{r plastic-waste-mismanaged}
-# insert code here
+ggplot(data = plastic_waste, aes(x = plastic_waste_per_cap, y = mismanaged_plastic_waste_per_cap)) + geom_point() + labs(x = "Plastic Waste Per Capita (Kg/day)", y = "Mismanaged Plastic Waste Per Capita (Kg/day)", title = "Per Capita Plastic Waste Vs. Waste Management")
 ```
 
 ### Exercise 6
 
-Remove this text, and add your answer for Exercise 6 here.
+It does not seem like there are any clear distinctions between continents that explain how plastic waste and waste mismanagement are associated, although there are some subtle differences. Oceania appears to mismanage its waste more consistently than other continents, and Europe seems to manage its waste well overall. 
 
 ```{r plastic-waste-mismanaged-continent}
-# insert code here
+ggplot(data = plastic_waste, aes(x = plastic_waste_per_cap, y = mismanaged_plastic_waste_per_cap, color = continent)) + geom_point() + labs(x = "Plastic Waste Per Capita (Kg/day)", y = "Mismanaged Plastic Waste Per Capita (Kg/day)", title = "Per Capita Plastic Waste Vs. Waste Mismanagement by Continent")
 ```
 
 ### Exercise 7
 
-Remove this text, and add your answer for Exercise 7 here.
+It seems like coastal population has a stronger linear relationship with plastic waste per capita than total population does, at least based on a cursory analysis. I wish I knew how to recode the data set to omit Trinidad and Tobago just so I could see what that does to the visualizations, because every graph I have made has seemed really skewed by this outlier, and it is harder to estimate a clear relationship with many variables. This could be a good step to include in this lab moving forward, especially early on because it would make all of the graphs clearer.
 
 ```{r plastic-waste-population-total}
-# insert code here
+ggplot(data = plastic_waste, aes(x = total_pop, y = plastic_waste_per_cap)) + geom_point() + labs(x = "Total Population", y = "Plastic Waste Per Capita (Kg/day)", title = "Per Capita Plastic Waste Vs. Population")
 ```
 
 ```{r plastic-waste-population-coastal}
-# insert code here
+ggplot(data = plastic_waste, aes(x = coastal_pop, y = plastic_waste_per_cap)) + geom_point() + labs(x = "Coastal Population", y = "Plastic Waste Per Capita (Kg/day)", title = "Per Capita Plastic Waste Vs. Coastal Population")
 ```
 
 ### Exercise 8
 
-Remove this text, and add your answer for Exercise 8 here.
-
+Okay I spoke too soon because my job is to take out Trinidad and Tobago, which is what I was just complaining about. I have been trying to find the answer online but all of the advice I can find wants me to use a box plot and eliminate everything that isn't within the quartiles. Additionally, when I add in the command geom_smooth instead of point it just turns the whole plot into smooth lines without the overlayed dots. It also opens a new pipe and I don't know how I would go about adding something afterwards. I am going to add another code section after this and try to overlay without jumbling everything up, so wish me luck.
 ```{r recreate-viz}
-# insert code here
+ggplot(data = plastic_waste, aes(x = coastal_pop/total_pop, y = plastic_waste_per_cap, color = continent)) + geom_point() + labs(x = "Coastal Population Proportion (Coastal/Total Population", y = "Plastic Waste Per Capita (Kg/day)", title = "Per Capita Plastic Waste Vs. Coastal Population")
 ```
 
-
+```{r recreation-retried}
+ggplot(data = plastic_waste, aes(x = coastal_pop/total_pop, y = plastic_waste_per_cap)) + geom_smooth() + labs(x = "Coastal Population Proportion (Coastal/Total Population", y = "Plastic Waste Per Capita (Kg/day)", title = "Per Capita Plastic Waste Vs. Coastal Population")
+```
+ 
+Okay I got the smooth shape without the continents, but I could not add on the points. I will schedule a meeting with you after the first week of classes to try to figure out both where I went wrong, as well as how to actually use github desktop and git kraken because as of now I cannot actually push my changes to github. 
